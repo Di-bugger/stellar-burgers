@@ -9,7 +9,7 @@ interface IProtectedRouteProps {
   children: React.ReactElement;
   isPublic?: boolean;
 }
-export const protectedRoute = ({
+export const ProtectedRoute = ({
   children,
   isPublic
 }: IProtectedRouteProps) => {

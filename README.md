@@ -96,6 +96,44 @@ const initialState: userState = {
 1.  ```getUserState``` - Возвращает полное состояние слайса
 2. ```getUser``` - Возвращает только данные пользователя.
 
+## 1. burgerConstructorSlice
+управляет состоянием конструктора бургеров в приложении. 
+Он отвечает за хранение и манипуляции с ингредиентами в текущем заказе.
+
+### Состояние (State)
+
+```
+type TConstructorState = {
+  bun: null | TIngredient;   
+  ingredients: TConstructorIngredient[];
+};
+```
+1. ```bun``` - выбранная булочка
+2. ```ingredients``` - массив начинок и соусов
+### Начальное состояние
+
+```
+const initialState: TConstructorState = {
+  bun: null,       
+  ingredients: [] 
+};
+```
+
+### Синхронные действия (Reducers):
+1. ```addBun(payload: TIngredient)``` - Добавляет/заменяет булку в конструкторе  
+2. ```addConstructorIngredient(payload: TConstructorIngredient)``` - Добавляет ингредиент в конструктор
+3. ```removeConstructorIngredient(payload: id)``` - Добавляет ингредиент в конструктор
+4. ```resetConstructor``` - Сбрасывает конструктор в начальное состояние
+5. ```moveConstructorIngredient(payload: index, type)``` - Добавляет ингредиент в конструктор. ```index``` - Текущая позиция ингредиента.
+```type``` - Направление перемещения ('up' или 'down')
+
+### Селекторы:
+1.  ```getBun``` - Возвращает текущую выбранную булку
+2. ```getConstructorIngredients``` - Возвращает массив ингредиентов (без булки)
+3. ```getConstructorItems``` - Возвращает полное состояние конструктора
+
+
+
 
 
 # React Route
@@ -124,6 +162,5 @@ interface ProtectedRouteProps {
 То происходит перенаправление на страницу входа ```/login```, с сохранением информации 
 о текущем местоположении ```state={{ from: location }}```
 3. Если: маршрут публичный `````isPublic````` и пользователь авторизован.
-То авторизованного пользователя перенаправляют:либо на страницу, 
-4. указанную в ```location.state.from``` (если она есть) либо на главную страницу ```/```
+То авторизованного пользователя перенаправляют:либо на страницу, указанную в ```location.state.from``` (если она есть) либо на главную страницу ```/```
 
