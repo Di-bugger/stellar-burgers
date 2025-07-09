@@ -208,6 +208,41 @@ interface TIngredientState {
 устанавливает ```isLoading = false``` после завершения
 
 
+## 5. OrderDetailsSlice
+Модуль orderDetailsSlice предоставляет Redux-логику для работы с деталями заказа
+
+### Состояние (State)
+
+```
+type OrderDetailsState = {
+  orderDetails: TOrder | null; // Данные о заказе
+  isLoading: boolean;         // Флаг загрузки
+  error: SerializedError | null; // Информация об ошибке
+};
+```
+
+### Начальное состояние
+
+```
+const initialOrderState: OrderDetailsState = {
+  orderDetails: null,
+  isLoading: false,
+  error: null
+};
+```
+
+### Синхронные действия (Reducers):
+1. ```clearOrderDetails``` - Сбрасывает состояние деталей заказа ```orderDetails = null```, ```error = null```
+
+### Селекторы:
+1.  ```selectOrderDetails``` - Возвращает данные о заказе ```(TOrder | null)```
+2. ```selectOrderLoadingState``` - Возвращает объект с состоянием загрузки
+
+### Асинхронные действия (Extra Reducers):
+
+1.  ```fetchOrderDetails``` -  Получает детали заказа по его номеру. Устанавливает ```isLoading = true```,
+При успехе: сохраняет данные заказа в ```orderDetails``` и устанавливает ```isLoading = false```.
+При ошибке: сохраняет информацию об ошибке и устанавливает ```isLoading = false```
 
 
 
