@@ -9,7 +9,7 @@ import { getFeedsApi } from '@api';
 
 interface FeedState {
   data: TOrdersData;
-  isLoading: boolean;
+  loading: boolean;
   error: SerializedError | null;
 }
 
@@ -19,7 +19,7 @@ const initialState: FeedState = {
     total: 0,
     totalToday: 0
   },
-  isLoading: false,
+  loading: false,
   error: null
 };
 
@@ -39,25 +39,25 @@ export const feedSlice = createSlice({
     getFeed: (state: FeedState) => state.data,
     getFeedOrders: (state: FeedState) => state.data.orders,
     selectFeedStatus: (state) => ({
-      isLoading: state.isLoading,
+      isLoading: state.loading,
       error: state.error
     })
   },
   extraReducers: (builder) => {
     builder
       .addCase(fetchFeed.pending, (state) => {
-        state.isLoading = true;
+        state.loading = true;
         state.error = null;
       })
       .addCase(
         fetchFeed.fulfilled,
         (state, action: PayloadAction<TOrdersData>) => {
-          state.isLoading = false;
+          state.loading = false;
           state.data = action.payload;
         }
       )
       .addCase(fetchFeed.rejected, (state, action) => {
-        state.isLoading = false;
+        state.loading = false;
         state.error = action.error;
       });
   }

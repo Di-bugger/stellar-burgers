@@ -6,6 +6,7 @@ import {
   NotFound404,
   Profile,
   ProfileOrders,
+  Register,
   ResetPassword
 } from '@pages';
 import '../../index.css';
@@ -13,8 +14,11 @@ import styles from './app.module.css';
 
 import { AppHeader, IngredientDetails, Modal, OrderInfo } from '@components';
 import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import { useDispatch } from '../../services/store';
 import { ProtectedRoute } from '../protected-route/protected-route';
+import { useEffect } from 'react';
+import { fetchUser } from '../../services/slices/user/user-slice';
+import { fetchIngredients } from '../../services/slices/ingridients/ingridients-slice';
 
 const App = () => {
   const navigate = useNavigate();
@@ -23,6 +27,12 @@ const App = () => {
   const location = useLocation();
   const backgroundLocation = location.state?.backgroundLocation;
   const handleModalClose = () => navigate(-1);
+
+  useEffect(() => {
+    dispatch(fetchUser());
+    dispatch(fetchIngredients());
+  }, [dispatch]);
+
   return (
     <div className={styles.app}>
       <AppHeader />
@@ -44,6 +54,15 @@ const App = () => {
           element={
             <ProtectedRoute isPublic>
               <ForgotPassword />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path='/register'
+          element={
+            <ProtectedRoute isPublic>
+              <Register />
             </ProtectedRoute>
           }
         />

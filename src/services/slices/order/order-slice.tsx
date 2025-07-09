@@ -1,53 +1,39 @@
-import { TOrder } from '@utils-types';
 import {
   createAsyncThunk,
   createSlice,
   SerializedError
 } from '@reduxjs/toolkit';
 import { getOrderByNumberApi } from '@api';
+import { TOrder } from '@utils-types';
 
-type OrderDetailsState = {
-  orderDetails: TOrder | null;
+type orderState = {
+  data: TOrder | null;
   isLoading: boolean;
   error: SerializedError | null;
 };
 
-const initialOrderState: OrderDetailsState = {
-  orderDetails: null,
+const initialState: orderState = {
+  data: null,
   isLoading: false,
   error: null
 };
 
 export const fetchOrderDetails = createAsyncThunk(
-  'orderDetails/fetch',
-  async (orderNumber: number, { rejectWithValue }) => {
-    try {
-      const response = await getOrderByNumberApi(orderNumber);
-      if (!response.success) {
-        return rejectWithValue('Failed to fetch order details');
-      }
-      return response.orders[0];
-    } catch (error) {
-      return rejectWithValue('Network error occurred');
+  'order/fetchOrderByNumber',
+  async (number: number) => {
+    const response = await getOrderByNumberApi(number);
+    if (!response.success) {
+      throw new Error('Failed to fetch order');
     }
+    return response.orders[0];
   }
 );
-
-export const orderDetailsSlice = createSlice({
-  name: 'orderDetails',
-  initialState: initialOrderState,
-  reducers: {
-    clearOrderDetails: (state) => {
-      state.orderDetails = null;
-      state.error = null;
-    }
-  },
+export const orderSlice = createSlice({
+  name: 'order',
+  initialState,
+  reducers: {},
   selectors: {
-    selectOrderDetails: (state) => state.orderDetails,
-    selectOrderLoadingState: (state) => ({
-      isLoading: state.isLoading,
-      error: state.error
-    })
+    getOrder: (state: orderState) => state.data
   },
   extraReducers: (builder) => {
     builder
@@ -57,7 +43,7 @@ export const orderDetailsSlice = createSlice({
       })
       .addCase(fetchOrderDetails.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.orderDetails = action.payload;
+        state.data = action.payload;
       })
       .addCase(fetchOrderDetails.rejected, (state, action) => {
         state.isLoading = false;
@@ -66,7 +52,4 @@ export const orderDetailsSlice = createSlice({
   }
 });
 
-export const { selectOrderDetails, selectOrderLoadingState } =
-  orderDetailsSlice.selectors;
-export const { clearOrderDetails } = orderDetailsSlice.actions;
-export const orderDetailsReducer = orderDetailsSlice.reducer;
+export const { getOrder } = orderSlice.selectors;

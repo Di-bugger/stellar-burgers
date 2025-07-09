@@ -9,7 +9,7 @@ import { userSlice } from './slices/user/user-slice';
 import { ingredientSlice } from './slices/ingridients/ingridients-slice';
 import { burgerConstructorSlice } from './slices/constructor/constructor-slice';
 import { feedSlice } from './slices/feed/feed-slice';
-import { orderDetailsSlice } from './slices/order/order-slice';
+import { orderSlice } from './slices/order/order-slice';
 import { ordersSlice } from './slices/orders/orders-slice';
 
 const rootReducer = combineSlices(
@@ -17,7 +17,7 @@ const rootReducer = combineSlices(
   burgerConstructorSlice,
   feedSlice,
   userSlice,
-  orderDetailsSlice,
+  orderSlice,
   ordersSlice
 );
 
