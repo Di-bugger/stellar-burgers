@@ -96,7 +96,7 @@ const initialState: userState = {
 1.  ```getUserState``` - Возвращает полное состояние слайса
 2. ```getUser``` - Возвращает только данные пользователя.
 
-## 2. burgerConstructorSlice
+## 2. BurgerConstructorSlice
 управляет состоянием конструктора бургеров в приложении. 
 Он отвечает за хранение и манипуляции с ингредиентами в текущем заказе.
 
@@ -133,7 +133,7 @@ const initialState: TConstructorState = {
 3. ```getConstructorItems``` - Возвращает полное состояние конструктора
 
 
-## 2. burgerConstructorSlice
+## 3. FeedSlice
 Модуль feedSlice предоставляет Redux-логику для работы с лентой заказов
 
 ### Состояние (State)
@@ -172,6 +172,40 @@ const initialState: FeedState = {
 при успехе сохраняет данные в ```data```,
 при ошибке сохраняет информацию об ошибке
 
+
+## 4. IngredientSlice
+Модуль ingredientSlice предоставляет Redux-логику для работы с ингредиентами
+
+### Состояние (State)
+
+```
+interface TIngredientState {
+  items: TIngredient[];
+  isLoading: boolean;
+  error: SerializedError | null;
+}   
+```
+
+### Начальное состояние
+
+```
+{
+  items: [],       
+  isLoading: false, 
+  error: null    
+}
+```
+
+### Селекторы:
+1.  ```getIngredients``` - Возвращает массив всех ингредиентов
+2. ```getIsLoadingInfo``` - Возвращает статус загрузки
+
+### Асинхронные действия (Extra Reducers):
+
+1.  ```fetchIngredients``` -  для загрузки списка ингредиентов. Устанавливает ```isLoading = true```,
+сохраняет полученные данные в ```items``` при успехе,
+сохраняет ошибку в ```error``` при неудаче,
+устанавливает ```isLoading = false``` после завершения
 
 
 
