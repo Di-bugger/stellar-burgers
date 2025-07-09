@@ -245,7 +245,64 @@ const initialOrderState: OrderDetailsState = {
 При ошибке: сохраняет информацию об ошибке и устанавливает ```isLoading = false```
 
 
+## 6. ordersSlice
+Модуль ordersSlice предоставляет управление состоянием заказов
 
+### Состояние (State)
+
+```
+{
+  orders: TOrder[];          // Массив всех заказов
+  currentOrder: TOrder | null; // Текущий выбранный заказ
+  loading: {
+    fetch: boolean;         // Статус загрузки списка заказов
+    create: boolean;        // Статус создания нового заказа
+  };
+  errors: {
+    fetch: SerializedError | null;  // Ошибка загрузки
+    create: SerializedError | null;  // Ошибка создания
+  };
+}
+```
+
+### Начальное состояние
+
+```
+{
+  orders: [],
+  currentOrder: null,
+  loading: {
+    fetch: false,
+    create: false
+  },
+  errors: {
+    fetch: null,
+    create: null
+  }
+}
+```
+
+### Синхронные действия (Reducers):
+1. ```resetCurrentOrder``` - Сбрасывает текущий заказ 
+2. ```resetErrors``` - Сбрасывает все ошибки
+
+### Селекторы:
+1.  ```getOrders``` - Возвращает массив всех заказов
+2. ```getCurrentOrder``` - Возвращает текущий выбранный заказ ```TOrder | null)```
+3. ```getIsLoadingOrders``` - Возвращает объект с состояниями загрузки ```{
+  fetch: boolean;
+  create: boolean;
+}```
+4. ```getErrorsOrders``` - Возвращает объект с ошибками
+
+### Асинхронные действия (Extra Reducers):
+
+1.  ```createOrder(ingredients: string[])``` -  Создает новый заказ. ```ingredients``` - массив ID ингредиентов. Устанавливает ```loading.create = true```,
+    При успехе: сохраняет заказ в ```currentOrder``` и устанавливает ```loading.create = false```.
+    При ошибке: сохраняет ошибку в ```errors.create``` и устанавливает ```loading.create = false```
+2. ```fetchOrders``` -  Загружает список всех заказов. Устанавливает ```loading.fetch = true```,
+    При успехе: Сохраняет заказы в ```orders``` и устанавливает ```loading.fetch  = false```.
+    При ошибке: сохраняет ошибку в ```errors.fetch``` и устанавливает ```loading.fetch  = false```
 
 
 
