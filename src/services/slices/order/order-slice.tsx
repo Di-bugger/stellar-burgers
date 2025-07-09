@@ -33,7 +33,7 @@ export const fetchOrderDetails = createAsyncThunk(
   }
 );
 
-const orderDetailsSlice = createSlice({
+export const orderDetailsSlice = createSlice({
   name: 'orderDetails',
   initialState: initialOrderState,
   reducers: {

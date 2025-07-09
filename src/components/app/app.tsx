@@ -28,7 +28,7 @@ const App = () => {
       <AppHeader />
       <Routes location={backgroundLocation || location}>
         <Route path='/' element={<ConstructorPage />} />
-        <Route path='feed' element={<Feed />} />
+        <Route path='/feed' element={<Feed />} />
 
         <Route
           path='/login'

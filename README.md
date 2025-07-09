@@ -305,13 +305,6 @@ const initialOrderState: OrderDetailsState = {
     При ошибке: сохраняет ошибку в ```errors.fetch``` и устанавливает ```loading.fetch  = false```
 
 
-
-
-
-
-
-
-
 # React Route
 
 Маршруты:

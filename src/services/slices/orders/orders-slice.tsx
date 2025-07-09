@@ -62,7 +62,7 @@ export const fetchOrders = createAsyncThunk(
   }
 );
 
-const ordersSlice = createSlice({
+export const ordersSlice = createSlice({
   name: 'orders',
   initialState,
   reducers: {
