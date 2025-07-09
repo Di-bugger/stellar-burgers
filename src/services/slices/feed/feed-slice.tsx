@@ -8,18 +8,18 @@ import {
 import { getFeedsApi } from '@api';
 
 interface FeedState {
-  data: TOrdersData;
-  loading: boolean;
+  feedData: TOrdersData;
+  isLoading: boolean;
   error: SerializedError | null;
 }
 
 const initialState: FeedState = {
-  data: {
+  feedData: {
     orders: [],
     total: 0,
     totalToday: 0
   },
-  loading: false,
+  isLoading: false,
   error: null
 };
 
@@ -36,28 +36,28 @@ export const feedSlice = createSlice({
   initialState,
   reducers: {},
   selectors: {
-    getFeed: (state: FeedState) => state.data,
-    getFeedOrders: (state: FeedState) => state.data.orders,
+    getFeed: (state: FeedState) => state.feedData,
+    getFeedOrders: (state: FeedState) => state.feedData.orders,
     selectFeedStatus: (state) => ({
-      isLoading: state.loading,
+      isLoading: state.isLoading,
       error: state.error
     })
   },
   extraReducers: (builder) => {
     builder
       .addCase(fetchFeed.pending, (state) => {
-        state.loading = true;
+        state.isLoading = true;
         state.error = null;
       })
       .addCase(
         fetchFeed.fulfilled,
         (state, action: PayloadAction<TOrdersData>) => {
-          state.loading = false;
-          state.data = action.payload;
+          state.isLoading = false;
+          state.feedData = action.payload;
         }
       )
       .addCase(fetchFeed.rejected, (state, action) => {
-        state.loading = false;
+        state.isLoading = false;
         state.error = action.error;
       });
   }

@@ -9,12 +9,12 @@ import { getIngredientsApi } from '@api';
 
 interface TIngredientState {
   items: TIngredient[];
-  loading: boolean;
+  isLoading: boolean;
   error: SerializedError | null;
 }
 const initialState: TIngredientState = {
   items: [],
-  loading: false,
+  isLoading: false,
   error: null
 };
 
@@ -29,24 +29,24 @@ export const ingredientSlice = createSlice({
   reducers: {},
   selectors: {
     getIngredients: (state) => state.items,
-    getIsLoadingInfo: (state) => state.loading
+    getIsLoadingInfo: (state) => state.isLoading
   },
   extraReducers: (builder) => {
     builder
       .addCase(fetchIngredients.pending, (state) => {
-        state.loading = true;
+        state.isLoading = true;
         state.error = null;
       })
       .addCase(
         fetchIngredients.fulfilled,
         (state, action: PayloadAction<TIngredient[]>) => {
           state.items = action.payload;
-          state.loading = false;
+          state.isLoading = false;
           state.error = null;
         }
       )
       .addCase(fetchIngredients.rejected, (state, action) => {
-        state.loading = false;
+        state.isLoading = false;
         state.error = action.error;
       });
   }

@@ -25,7 +25,8 @@ const App = () => {
   //для будудщего запроса
   const dispatch = useDispatch();
   const location = useLocation();
-  const backgroundLocation = location.state?.backgroundLocation;
+  const locationState = location.state as { background?: Location };
+  const backgroundLocation = locationState?.background;
   const handleModalClose = () => navigate(-1);
 
   useEffect(() => {

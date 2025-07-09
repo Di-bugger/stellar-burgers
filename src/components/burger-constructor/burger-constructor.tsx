@@ -37,7 +37,8 @@ export const BurgerConstructor: FC = () => {
       constructorItems.bun._id,
       ...constructorItems.ingredients.map(
         (ingrid: TConstructorIngredient) => ingrid._id
-      )
+      ),
+      constructorItems.bun._id
     ];
     dispatch(createOrder(data));
   };
@@ -52,7 +53,7 @@ export const BurgerConstructor: FC = () => {
     () =>
       (constructorItems.bun ? constructorItems.bun.price * 2 : 0) +
       constructorItems.ingredients.reduce(
-        (s: number, v: TConstructorIngredient) => s + v.price,
+        (a: number, b: TConstructorIngredient) => a + b.price,
         0
       ),
     [constructorItems]
