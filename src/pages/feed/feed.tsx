@@ -10,6 +10,7 @@ import {
 
 export const Feed: FC = () => {
   const orders: TOrder[] = useSelector(getFeedOrders);
+  console.log('Заказы', orders);
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(fetchFeed());
