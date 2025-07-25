@@ -9,7 +9,7 @@ import { getIngredients } from '../../services/slices/ingridients/ingridients-sl
 export const BurgerIngredients: FC = () => {
   /** TODO: взять переменные из стора */
   const ingredients = useSelector(getIngredients);
-  console.log(ingredients);
+  // console.log(ingredients);
   const buns: TIngredient[] = ingredients.filter(
     (ingredient: TIngredient) => ingredient.type === 'bun'
   );
