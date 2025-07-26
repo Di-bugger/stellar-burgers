@@ -62,7 +62,7 @@ describe('Burger-constructor', () => {
   });
 
   it('Закрытие модалки по клику на оверлей', () => {
-     cy.contains('Биокотлета из марсианской Магнолии').click();
+    cy.contains('Биокотлета из марсианской Магнолии').click();
 
     cy.get('[data-cy=modal]').should('exist');
     cy.get('[data-cy=modal-overlay]').should('exist');
