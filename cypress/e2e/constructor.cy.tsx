@@ -1,0 +1,130 @@
+import Cypress from "cypress";
+
+const SELECTORS = {
+  burgerConstructor: '[data-cy=burger-constructor]',
+  modal: '[data-cy=modal]',
+  closeButton: '[data-cy=modal-close-button]',
+  modalOverlay: '[data-cy=modal-overlay]'
+};
+
+describe('Burger-constructor', () => {
+  beforeEach(() => {
+    //Мокирование API запросов
+    cy.intercept('GET', '**/api/ingredients', {
+      fixture: 'ingredients.json'
+    }).as('getIngredients');
+
+    cy.intercept('GET', '**/api/auth/user', {
+      statusCode: 200,
+      body: {
+        success: true,
+        user: { email: 'fake@example.com', name: 'Fake user' }
+      }
+    }).as('getUser');
+
+    //Настройка аутентификации
+    cy.setCookie('accessToken', 'fake-access-token');
+    localStorage.setItem('refreshToken', 'fake-refresh-token');
+
+    cy.visit('/');
+  });
+
+  //После каждого теста очищаем от fake рефреш токена
+  afterEach(() => {
+    localStorage.clear();
+  });
+
+  it('Добавление булочки в конструктор', () => {
+    cy.contains('Краторная булка N-200i')
+      .parents('li')
+      .within(() => {
+        cy.contains('Добавить').click();
+      });
+
+    cy.get(SELECTORS.burgerConstructor).should(
+      'contain',
+      'Краторная булка N-200i'
+    );
+  });
+
+  it('Добавление начинки в конструктор', () => {
+    cy.contains('Биокотлета из марсианской Магнолии')
+      .parents('li')
+      .within(() => {
+        cy.contains('Добавить').click();
+      });
+
+    cy.get(SELECTORS.burgerConstructor).should(
+      'contain',
+      'Биокотлета из марсианской Магнолии'
+    );
+  });
+
+  it('Открытие и закрытие модалки', () => {
+    cy.contains('Биокотлета из марсианской Магнолии').click();
+
+    cy.get(SELECTORS.modal).should('exist');
+    cy.get(SELECTORS.closeButton).click();
+    cy.get(SELECTORS.modal).should('not.exist');
+  });
+
+  it('Закрытие модалки по клику на оверлей', () => {
+    cy.contains('Биокотлета из марсианской Магнолии').click();
+
+    cy.get(SELECTORS.modal).should('exist');
+    cy.get(SELECTORS.modalOverlay).should('exist');
+
+    // Кликаем на оверлей с force: true
+    cy.get(SELECTORS.modalOverlay).click({ force: true });
+
+    cy.get(SELECTORS.modal).should('not.exist');
+    cy.get(SELECTORS.modalOverlay).should('not.exist');
+  });
+
+  it('Создание заказа и очищение констурктора', () => {
+    cy.intercept('POST', '**/api/orders', {
+      statusCode: 200,
+      body: {
+        success: true,
+        name: 'Краторный био-марсианский бургер',
+        order: {
+          number: 85091
+        }
+      }
+    }).as('createOrder');
+
+    cy.contains('Краторная булка N-200i')
+      .parents('li')
+      .within(() => {
+        cy.contains('Добавить').click();
+      });
+
+    cy.contains('Биокотлета из марсианской Магнолии')
+      .parents('li')
+      .within(() => {
+        cy.contains('Добавить').click();
+      });
+
+    cy.contains('Оформить заказ').click();
+
+    cy.wait('@createOrder');
+
+    cy.get(SELECTORS.modal)
+      .should('exist')
+      .and('contain', 'Ваш заказ')
+      .and('contain', '85091');
+
+    cy.get(SELECTORS.closeButton).click();
+
+    cy.get(SELECTORS.modal).should('not.exist');
+
+    cy.get(SELECTORS.burgerConstructor).should(
+      'not.contain',
+      'Краторная булка N-200i'
+    );
+    cy.get(SELECTORS.burgerConstructor).should(
+      'not.contain',
+      'Биокотлета из марсианской Магнолии'
+    );
+  });
+});

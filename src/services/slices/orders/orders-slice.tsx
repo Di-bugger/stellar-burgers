@@ -29,6 +29,7 @@ export const createOrder = createAsyncThunk(
   async (ingredients: string[]) => {
     const response = await orderBurgerApi(ingredients);
     if (response?.success) {
+      console.log(response.order);
       return response.order;
     } else {
       throw new Error('Ошибка при создании заказа');
