@@ -1,5 +1,12 @@
 import Cypress from "cypress";
 
+const SELECTORS = {
+  burgerConstructor: '[data-cy=burger-constructor]',
+  modal: '[data-cy=modal]',
+  closeButton: '[data-cy=modal-close-button]',
+  modalOverlay: '[data-cy=modal-overlay]'
+};
+
 describe('Burger-constructor', () => {
   beforeEach(() => {
     //Мокирование API запросов
@@ -34,7 +41,7 @@ describe('Burger-constructor', () => {
         cy.contains('Добавить').click();
       });
 
-    cy.get('[data-cy=burger-constructor]').should(
+    cy.get(SELECTORS.burgerConstructor).should(
       'contain',
       'Краторная булка N-200i'
     );
@@ -47,7 +54,7 @@ describe('Burger-constructor', () => {
         cy.contains('Добавить').click();
       });
 
-    cy.get('[data-cy=burger-constructor]').should(
+    cy.get(SELECTORS.burgerConstructor).should(
       'contain',
       'Биокотлета из марсианской Магнолии'
     );
@@ -56,22 +63,22 @@ describe('Burger-constructor', () => {
   it('Открытие и закрытие модалки', () => {
     cy.contains('Биокотлета из марсианской Магнолии').click();
 
-    cy.get('[data-cy=modal]').should('exist');
-    cy.get('[data-cy=modal-close-button]').click();
-    cy.get('[data-cy=modal]').should('not.exist');
+    cy.get(SELECTORS.modal).should('exist');
+    cy.get(SELECTORS.closeButton).click();
+    cy.get(SELECTORS.modal).should('not.exist');
   });
 
   it('Закрытие модалки по клику на оверлей', () => {
     cy.contains('Биокотлета из марсианской Магнолии').click();
 
-    cy.get('[data-cy=modal]').should('exist');
-    cy.get('[data-cy=modal-overlay]').should('exist');
+    cy.get(SELECTORS.modal).should('exist');
+    cy.get(SELECTORS.modalOverlay).should('exist');
 
     // Кликаем на оверлей с force: true
-    cy.get('[data-cy=modal-overlay]').click({ force: true });
+    cy.get(SELECTORS.modalOverlay).click({ force: true });
 
-    cy.get('[data-cy=modal]').should('not.exist');
-    cy.get('[data-cy=modal-overlay]').should('not.exist');
+    cy.get(SELECTORS.modal).should('not.exist');
+    cy.get(SELECTORS.modalOverlay).should('not.exist');
   });
 
   it('Создание заказа и очищение констурктора', () => {
@@ -102,20 +109,20 @@ describe('Burger-constructor', () => {
 
     cy.wait('@createOrder');
 
-    cy.get('[data-cy=modal]')
+    cy.get(SELECTORS.modal)
       .should('exist')
       .and('contain', 'Ваш заказ')
       .and('contain', '85091');
 
-    cy.get('[data-cy=modal] button').click();
+    cy.get(SELECTORS.closeButton).click();
 
-    cy.get('[data-cy=modal]').should('not.exist');
+    cy.get(SELECTORS.modal).should('not.exist');
 
-    cy.get('[data-cy=burger-constructor]').should(
+    cy.get(SELECTORS.burgerConstructor).should(
       'not.contain',
       'Краторная булка N-200i'
     );
-    cy.get('[data-cy=burger-constructor]').should(
+    cy.get(SELECTORS.burgerConstructor).should(
       'not.contain',
       'Биокотлета из марсианской Магнолии'
     );
